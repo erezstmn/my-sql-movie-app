@@ -26,3 +26,28 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+select{
+  color: grey;
+}
+
+option {
+  color: black;
+}
+
+option[default] {
+   display: none;
+}
+fieldset { 
+  display: block;
+  margin-left: 30%;
+  margin-right: 30%;
+  padding-top: 0.35em;
+  padding-bottom: 0.625em;
+  padding-left: 0.75em;
+  padding-right: 0.75em;
+  border: 2px groove (internal value);
+}
+.ErrorMessage {
+  color: red;
+  font-weight: bold
+}
