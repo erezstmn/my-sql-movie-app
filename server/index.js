@@ -10,6 +10,10 @@ app.get('/', (req, res) => {
     res.set('Content-Type', 'application/json');
     res.send('Hello from node server');
 });
+app.get('/movies/', (req, res) => {
+    console.log('get request received')
+    res.send(`Hello from the servre running on ${PORT}`);
+})
 app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
 });
