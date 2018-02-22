@@ -190,20 +190,16 @@ class App extends Component {
     });
     axios.get(`../movies/search?genre=${searchGenre}&from=${fromYear}&to=${toYear}`)
     .then((response) => {
-      if (response.data.movies.length === 0){
+      
+      if (response.data.length === 0){
         this.setState(() => {
           return ({
             list: <p>No movies were found</p>
           });
         });
-      } else{
-        let movieData = response.data.movies.map((movie) =>{
-          let sum = 0;
-          for (var i=0; i<movie.score.length; i++){
-            sum += parseInt(movie.score[i] ,10);
-          }
-          let avarage = sum/movie.score.length;
-        return (<li>Name: {movie.movie_name} Avarage score: {avarage || 'No ratings'} </li>);
+      } else {
+        let movieData = response.data.map((movie) =>{  
+        return (<li>Name: {movie.movie_name} || Avarage score: {movie.avarage_rating || 'No ratings'} </li>);
         });
         this.setState(() =>{
           return ({
@@ -216,14 +212,7 @@ class App extends Component {
       console.log(error);
     });
 
-  };
-  // handleButton(){
-  //   axios.get('../movies').then((res) => {
-  //     console.log(res);
-  //   }).catch((e) => {
-  //     console.log(e);
-  //   })
-  // };  
+  };  
   render() {
     return (
       <div className="App">

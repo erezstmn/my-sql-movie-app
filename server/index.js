@@ -15,8 +15,7 @@ const mySqlHost = "localhost";
 app.post('/movies', (req, res) => {   
     let movie_name = req.body.movie_name;
     let genre = req.body.genre;
-    let release_year= req.body.release_year;
-    //add new movie to DB
+    let release_year= req.body.release_year;    
     const connection = mysql.createConnection({
         host: 'tviw6wn55xwxejwj.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
         user:'vddz3a51wdk49rc4',
@@ -64,8 +63,22 @@ app.get('/movies/search', (req, res) => {
     let genreToMatch = req.query.genre;
     let fromYear = req.query.from -1;
     let toYear = req.query.to +1;
-    //return movies by year and genre
-    res.send('return movies by year and genre');
+    const connection = mysql.createConnection({
+        host: 'tviw6wn55xwxejwj.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
+        user:'vddz3a51wdk49rc4',
+        password:'pxh153k7dxyuvt4n'
+    });
+    connection.connect((error) => {
+        if (error){
+            return console.log(error);
+        }    
+        console.log('Connected');       
+    });
+    connection.query(`SELECT movie_name, avarage_rating FROM x00qcbxug94h1hki.movies WHERE (release_year BETWEEN ${fromYear} AND ${toYear}) AND (genre = '${genreToMatch}')`, (error, result) => {
+        console.log(result);
+        res.send(result);
+    });
+    connection.end();
 });
 app.patch('/movies/', (req,res) => {
     let movie = req.query.movie_name; 
@@ -89,11 +102,7 @@ app.patch('/movies/', (req,res) => {
         currentAvg = parseFloat(result[0].avarage_rating, 10);
         numOfRatings = parseInt(result[0].number_of_ratings, 10); 
         numOfRatings++;
-        let newAvarage = ((currentAvg * (numOfRatings-1)) + newScore) / numOfRatings;
-        console.log('currentAvg', currentAvg);
-        console.log('newScore: ', newScore);
-        console.log('numOfRatings: ', numOfRatings );
-        console.log('newAvarge: ', newAvarage);            
+        let newAvarage = ((currentAvg * (numOfRatings-1)) + newScore) / numOfRatings;                  
         let sql = `UPDATE x00qcbxug94h1hki.movies SET avarage_rating = ${newAvarage}, number_of_ratings = ${numOfRatings} WHERE movie_name= "${movie}"`
         connection.query(sql,
             (error, result) => {
